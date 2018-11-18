@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by gaurav on 14/11/18.
- */
-
 @Component
 public class UserDaoService {
 
@@ -39,7 +35,7 @@ public class UserDaoService {
         return users;
     }
 
-    public void addUser(User user) {
+    public User addUser(User user) {
 
         if (user.getId() == null) {
             totalUsers++;
@@ -47,5 +43,7 @@ public class UserDaoService {
         }
 
         users.add(user);
+
+        return user;
     }
 }
