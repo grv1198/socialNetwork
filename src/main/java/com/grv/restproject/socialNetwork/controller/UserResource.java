@@ -44,4 +44,16 @@ public class UserResource {
 
        return ResponseEntity.created(location).build();
     }
+
+    @DeleteMapping("/users/{userId}")
+    public User deleteUser(@PathVariable Integer userId){
+
+        User user =  userDaoService.deleteUserById(userId);
+        if (user == null) {
+            throw new UserNotFoundException("ID : " + userId);
+        }
+
+        return user;
+
+    }
 }
