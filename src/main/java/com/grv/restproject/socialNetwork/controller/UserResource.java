@@ -1,5 +1,6 @@
 package com.grv.restproject.socialNetwork.controller;
 
+import com.grv.restproject.socialNetwork.exception.UserNotFoundException;
 import com.grv.restproject.socialNetwork.user.service.User;
 import com.grv.restproject.socialNetwork.user.service.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,13 @@ public class UserResource {
     @GetMapping("/users/{userId}")
     public User getUsers(@PathVariable Integer userId){
 
-        return userDaoService.getUserById(userId);
+        User user =  userDaoService.getUserById(userId);
+        if (user == null) {
+            throw new UserNotFoundException("ID : " + userId);
+        }
+
+        return user;
+
     }
 
     @PostMapping("/users")
