@@ -1,8 +1,10 @@
 package com.grv.restproject.socialNetwork.exception;
 
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -23,5 +25,12 @@ public class SocialNetworkExceptionResponseHandler extends ResponseEntityExcepti
     public final ResponseEntity<Object> handleUserNotFoundException(Exception ex, WebRequest request) {
         ExceptionResponseBean exceptionResponseBean = new ExceptionResponseBean(Instant.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity(exceptionResponseBean, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ExceptionResponseBean exceptionResponseBean = new ExceptionResponseBean(Instant.now(), "Validation failed" , ex.getBindingResult().toString());
+        return new ResponseEntity(exceptionResponseBean, HttpStatus.BAD_REQUEST);
     }
 }
