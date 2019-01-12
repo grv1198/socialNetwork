@@ -4,12 +4,17 @@ import com.grv.restproject.socialNetwork.exception.UserNotFoundException;
 import com.grv.restproject.socialNetwork.user.service.User;
 import com.grv.restproject.socialNetwork.user.service.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 @RestController
@@ -25,19 +30,24 @@ public class UserResource {
     }
 
     @GetMapping("/users/{userId}")
-    public User getUsers(@PathVariable Integer userId){
+    public Resource<User> getUsers(@PathVariable Integer userId){
 
         User user =  userDaoService.getUserById(userId);
         if (user == null) {
             throw new UserNotFoundException("ID : " + userId);
         }
 
-        return user;
+        Resource<User> resource = new Resource<>(user);
+
+        ControllerLinkBuilder linkBuilder = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getAllUsers());
+
+        resource.add(linkBuilder.withRel("all-users"));
+        return resource;
 
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@RequestBody User user){
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User user){
 
        User savedUser =  userDaoService.addUser(user);
        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
