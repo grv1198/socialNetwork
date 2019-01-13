@@ -1,7 +1,9 @@
 package com.grv.restproject.socialNetwork.controller;
 
 import com.grv.restproject.socialNetwork.exception.UserNotFoundException;
+import com.grv.restproject.socialNetwork.model.Post;
 import com.grv.restproject.socialNetwork.model.User;
+import com.grv.restproject.socialNetwork.service.PostRepository;
 import com.grv.restproject.socialNetwork.service.UserRepsitory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
@@ -21,6 +23,9 @@ public class UserJPAResource {
 
     @Autowired
     private UserRepsitory userRepsitory;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @GetMapping("/jpa/users")
     public List<User> getAllUsers(){
@@ -52,6 +57,30 @@ public class UserJPAResource {
        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
 
        return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/jpa/users/{userId}/posts")
+    public List<Post> getUserPost(@PathVariable Integer userId){
+
+        Optional<User> user =  userRepsitory.findById(userId);
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("ID : " + userId);
+        }
+
+        return user.get().getPosts();
+    }
+
+    @PostMapping("/jpa/users/{id}/posts")
+    public ResponseEntity<Object> createUserPost(@PathVariable Integer id,  @Valid @RequestBody Post post){
+
+        Optional<User> user =  userRepsitory.findById(id);
+        post.setUser(user.get());
+
+        Post savedPost = postRepository.save(post);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedPost.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping("/jpa/users/{userId}")
