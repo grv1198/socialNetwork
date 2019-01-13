@@ -1,8 +1,8 @@
 package com.grv.restproject.socialNetwork.controller;
 
 import com.grv.restproject.socialNetwork.exception.UserNotFoundException;
-import com.grv.restproject.socialNetwork.user.service.User;
-import com.grv.restproject.socialNetwork.user.service.UserRepsitory;
+import com.grv.restproject.socialNetwork.model.User;
+import com.grv.restproject.socialNetwork.service.UserRepsitory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;

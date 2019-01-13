@@ -1,6 +1,6 @@
-package com.grv.restproject.socialNetwork.user.service;
+package com.grv.restproject.socialNetwork.service;
 
-import jdk.nashorn.internal.ir.WhileNode;
+import com.grv.restproject.socialNetwork.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
