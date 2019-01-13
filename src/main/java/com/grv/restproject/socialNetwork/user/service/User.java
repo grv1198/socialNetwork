@@ -3,6 +3,9 @@ package com.grv.restproject.socialNetwork.user.service;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -11,9 +14,11 @@ import java.util.Date;
  * Created by gaurav on 15/11/18.
  */
 @ApiModel(description = "This is a member of social network")
+@Entity
 public class User {
 
-
+    @Id
+    @GeneratedValue
     private Integer id;
 
     @Size(min = 2, message = "Name should be at least 2 characters long")
